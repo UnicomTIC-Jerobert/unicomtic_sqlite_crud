@@ -1,6 +1,31 @@
 Server Side Rendering
 
+npm install sqlite3
+
+localhost:3000/employees				=> GET	list all Employees
+http://localhost:3000/employees/add			=> GET	Add employee
+http://localhost:3000/employees/view?empId=EMP_AVGF 	=> GET	view single employee
+http://localhost:3000/employees/edit?empId=EMP_RWOV	=> GET  to load edit page
+
+http://localhost:3000/employees/add			=> POST	Add employee
+http://localhost:3000/employees/update			=> POST	Update employee
 
 here i take example to create employee CRUD and utilize SQLite database, so by answering questions we can able 
 to learn things
  
+ex 1:
+Explain How to create web-server with nodejs ?
+what is request , response in client server architecture ?
+explain request.url , request.method ?
+explain remaining code for routing purpose ?
+
+url
+query parameters
+
+request 
+	request header
+	request body
+
+response
+	response header
+	response body

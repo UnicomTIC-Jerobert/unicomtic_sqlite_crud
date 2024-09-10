@@ -19,80 +19,23 @@ function listEmployees(req, res) {
         }
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.write('<h1>Employees</h1>');
+        res.write('<a href="/employees/add">Add Employee</a>');
+        res.write('<table border="1">');
+        res.write('<tr><th>EMP ID</th><th>First Name</th><th>Last Name</th><th>DOB</th></tr>');
         rows.forEach((row) => {
-            res.write(`<p>${row.id} - ${row.firstname} ${row.lastname} (DOB: ${row.dob})</p>`);
+            res.write(`<tr> 
+                <td>${row.id}</td>  
+                <td> ${row.firstname}</td> 
+                <td> ${row.lastname}</td> 
+                <td>${row.dob}</td> 
+                <td><a href="/employees/view?empId=${row.id}">view</a></td> 
+                <td><a href="/employees/edit?empId=${row.id}">edit</a></td> 
+                </tr>`);
         });
+        res.write('</table>');
         res.end();
     });
 }
-
-function listEmployeesWithContacts(req, res) {
-    const sql = `
-        SELECT e.id, e.firstname, e.lastname, e.dob, 
-               ec.phoneNumbers, ec.addresses 
-        FROM Employee e
-        LEFT JOIN EmployeeContact ec 
-        ON e.id = ec.employeeId
-    `;
-
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return console.error(err.message);
-        }
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.write('<h1>Employees List</h1>');
-        rows.forEach((row) => {
-            res.write(`<p>${row.id} - ${row.firstname} ${row.lastname} (DOB: ${row.dob})</p>`);
-            res.write(`<p>Phone Numbers: ${row.phoneNumbers ? row.phoneNumbers : 'N/A'}</p>`);
-            res.write(`<p>Addresses: ${row.addresses ? row.addresses : 'N/A'}</p>`);
-        });
-        res.end();
-    });
-}
-
-function listEmployeesWithEdit(req, res) {
-    const sql = `SELECT e.id, e.firstname, e.lastname, e.dob FROM Employee e`;
-
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return console.error(err.message);
-        }
-
-        let html = `
-            <html>
-            <head>
-                <title>Employees</title>
-                <style>
-                    body { font-family: Arial, sans-serif; }
-                    h1 { color: #333; }
-                </style>
-            </head>
-            <body>
-                <h1>Employees List</h1>
-                <a href="/add">Add New Employee</a>
-                <ul>
-        `;
-
-        // Dynamically build employee list with Edit links
-        rows.forEach((row) => {
-            html += `<li>${row.firstname} ${row.lastname} (DOB: ${row.dob}) 
-                     <a href="/edit?id=${row.id}">Edit</a> 
-                     <a href="/delete?id=${row.id}" onclick="return confirm('Are you sure?')">Delete</a></li>`;
-        });
-
-        html += `
-                </ul>
-            </body>
-            </html>
-        `;
-
-        // Send the response with the dynamically created HTML
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(html);
-    });
-}
-
-
 
 // View a single employee with contact details
 function viewEmployee(req, res, employeeId) {
@@ -106,6 +49,7 @@ function viewEmployee(req, res, employeeId) {
             return res.end();
         }
         res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write("<a href='/employees'>back</a>");
         res.write(`<h1>${row.firstname} ${row.lastname}</h1><p>DOB: ${row.dob}</p>`);
 
         db.all(`SELECT * FROM EmployeeContact WHERE employeeId = ?`, [employeeId], (err, contacts) => {
@@ -210,7 +154,7 @@ function editEmployee(req, res, employeeId) {
             </head>
             <body>
                 <h1>Edit Employee</h1>
-                <form action="/update" method="POST">
+                <form action="/employees/update" method="POST">
                     <input type="hidden" name="id" value="${row.id}">
                     <label>First Name:</label>
                     <input type="text" name="firstname" value="${row.firstname}">
@@ -234,6 +178,26 @@ function editEmployee(req, res, employeeId) {
     });
 }
 
+function updateEmployee(req, res, formData) {
+    const id = formData.id;
+    const firstname = formData.firstname;
+    const lastname = formData.lastname;
+    const dob = formData.dob;
+
+    const sql = `UPDATE Employee 
+    SET firstname = ?, lastname = ?, dob = ? 
+    WHERE id = ?`;
+
+    db.run(sql, [firstname, lastname, dob, id], function (err) {
+        if (err) {
+            return console.error(err.message);
+        }
+        // After updating, redirect back to the employee list
+        res.writeHead(302, { 'Location': '/employees' });
+        res.end();
+    });
+}
+
 
 
 
@@ -242,5 +206,7 @@ module.exports = {
     viewEmployee,
     viewEmployeeWithJoin,
     addEmployee,
+    editEmployee,
+    updateEmployee,
     deleteEmployee
 };
