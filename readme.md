@@ -1,15 +1,15 @@
 How to do Console based CRUD app using raw sql queries
 
-Employee CRUD
+video - 9
 
-tools needed
-* visual studio code  [ you can do even without installing visual Studio 2022 ]
-* dotnet core installed in your machine
+Going to See CSS rendering
+    inline
+    internal
+    external
 
-we start from main method with messy code and going to refactor to use OOP concepts
+Video - 10 
 
-* going to use SQLite database with raw sql queries
-* SQLite is file based database
-* use dbbrowser to view SQLite database
-
+Going to See Javascript rendering
+    internal
+    external
 
