@@ -1,5 +1,4 @@
-//const db = require('./db_inmemory');
-const db = require('./db_filepath');
+const db = require('../db');
 
 // Generate a random Employee ID (EMP_XXXX)
 const generateEmpId = () => {

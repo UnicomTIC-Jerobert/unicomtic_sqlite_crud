@@ -3,6 +3,7 @@ const path = require('path');
 
 // Specify the path to the SQLite database file (e.g., './database/employee.db')
 const dbPath = path.resolve(__dirname, 'database', 'employee.db');
+console.log(dbPath);
 
 // Initialize the database connection to a file
 const db = new sqlite3.Database(dbPath, (err) => {

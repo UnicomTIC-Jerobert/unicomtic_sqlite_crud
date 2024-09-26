@@ -3,7 +3,7 @@ const url = require('url');
 const fs = require('fs');
 const qs = require('querystring');
 
-const employeeController = require('./employeeController');
+const employeeController = require('./controllers/employeeController');
 
 const server = http.createServer(function (req, res) {
 
