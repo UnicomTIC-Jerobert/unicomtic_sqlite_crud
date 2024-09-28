@@ -1,41 +1,4 @@
-const db = require('../db');
-
-// Helper function to make db queries Promise-based
-const dbAll = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        db.all(sql, params, (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(rows);
-            }
-        });
-    });
-};
-
-const dbGet = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        db.get(sql, params, (err, row) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(row);
-            }
-        });
-    });
-};
-
-const dbRun = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        db.run(sql, params, function (err) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(this);
-            }
-        });
-    });
-};
+const { dbAll, dbGet, dbRun } = require('../helpers/dbHelpers');
 
 // Generate a random Employee ID (EMP_XXXX)
 const generateEmpId = () => {
@@ -85,14 +48,6 @@ async function listEmployees(req, res) {
         });
 
         res.write('</table>');
-        res.write(
-            `<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    console.log('print message in browser console in List Employee');
-                    alert('Hi, testing Client javascript render in List Employee');
-                });
-            </script>`
-        );
         res.write('</body>');
         res.write('</html>');
         res.end();

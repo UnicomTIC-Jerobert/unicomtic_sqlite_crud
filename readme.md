@@ -18,3 +18,6 @@ Going to see how to use async/await instead of callbacks
 here there is a work around to handle this
 
 promises
+
+video - 12 
+Going to refactor helper promise function
