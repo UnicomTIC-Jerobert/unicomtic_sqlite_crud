@@ -1,5 +1,6 @@
 const db = require('../db');
 
+
 // Generate a random Employee ID (EMP_XXXX)
 const generateEmpId = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -222,9 +223,6 @@ function updateEmployee(req, res, formData) {
         res.end();
     });
 }
-
-
-
 
 module.exports = {
     listEmployees,
