@@ -60,6 +60,7 @@ async function listEmployees(req, res) {
 async function viewEmployee(req, res, employeeId) {
     try {
         const employee = await dbGet(`SELECT * FROM Employee WHERE id = ?`, [employeeId]);
+        
         if (!employee) {
             res.writeHead(404, { 'Content-Type': 'text/html' });
             res.write('<h1>Employee Not Found</h1>');
